@@ -4,6 +4,7 @@ This will be my attempt to follow along with a couple of tutorials in order to
 build a promise library.
 
 http://thecodebarbarian.com/write-your-own-node-js-promise-library-from-scratch.html
+
 https://github.com/Jeach/jeach-pqueues
 
 ## Scenario
