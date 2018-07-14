@@ -13,6 +13,7 @@ class MyPromise {
 
     // the executor function takes 2 parameters, resolve() and reject()
     const resolve = (res) => {
+      console.log('IM CURRENTLY RESOLVING');
       // A promise is considered "settled" when it is no longer
       // pending, that is, when either `resolve()` or `reject()`
       // was called once. Calling `resolve()` or `reject()` twice
@@ -29,28 +30,28 @@ class MyPromise {
       for (const { onFulfilled } of this.$chained) {
         onFulfilled(res);
       }
-
-      const reject = (err) => {
-        if (this.$state !== 'PENDING') {
-        }
-        this.$state = 'REJECTED';
-        this.$internalValue = err;
-        for (const { onRejected } of this.$chained) {
-          onRejected(err);
-        }
-      };
-
-      // Call the executor function with `resolve()` and `reject()` as in the spec.
-      try {
-        // If executor function throws a sync exception, we consider that a
-        // rejection. Keep in mind that, since `resolve()` or `reject()` can
-        // only be called once, a function that synchronously calls `resolve()`
-        // and then throws will lead to a fulfilled promise and a swallowed error.
-        executor(resolve, reject);
-      } catch (err) {
-        reject(err);
+    };
+    const reject = (err) => {
+      if (this.$state !== 'PENDING') {
+      }
+      this.$state = 'REJECTED';
+      this.$internalValue = err;
+      for (const { onRejected } of this.$chained) {
+        onRejected(err);
       }
     };
+
+    // Call the executor function with `resolve()` and `reject()` as in the spec.
+    try {
+      // If executor function throws a sync exception, we consider that a
+      // rejection. Keep in mind that, since `resolve()` or `reject()` can
+      // only be called once, a function that synchronously calls `resolve()`
+      // and then throws will lead to a fulfilled promise and a swallowed error.
+      console.log('TRYING TO EXECUTE');
+      executor(resolve, reject);
+    } catch (err) {
+      reject(err);
+    }
   }
 
   // then() function takes two parameters, onFulfilled() and onRejected(). The
@@ -62,11 +63,23 @@ class MyPromise {
   // functions can call them.
   then(onFulfilled, onRejected) {
     if (this.$state === 'FULFILLED') {
+      console.log('ON FULFILLED');
       onFulfilled(this.$internalValue);
     } else if (this.$state === 'REJECTED') {
+      console.log('ON REJECTED');
       onRejected(this.$internalValue);
     } else {
+      console.log('ON CHAINED');
       this.$chained.push({ onFulfilled, onRejected });
     }
   }
 }
+
+const firstPromise = new MyPromise((resolve, reject) => {
+  console.log('RUNNING THE EXECUTOR FUNCTION');
+  // imagine if this were an api call, that took a second
+  // to respond with 'wubadubdub'
+  setTimeout(resolve('wubadubdub'), 1000);
+});
+
+firstPromise.then(successMessage => console.log(`wahoo ${successMessage}`));
