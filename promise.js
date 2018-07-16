@@ -62,24 +62,56 @@ class MyPromise {
   // push the functions onto the $chained array so the resolve() and reject()
   // functions can call them.
   then(onFulfilled, onRejected) {
-    if (this.$state === 'FULFILLED') {
-      console.log('ON FULFILLED');
-      onFulfilled(this.$internalValue);
-    } else if (this.$state === 'REJECTED') {
-      console.log('ON REJECTED');
-      onRejected(this.$internalValue);
-    } else {
-      console.log('ON CHAINED');
-      this.$chained.push({ onFulfilled, onRejected });
-    }
+    return new MyPromise((resolve, reject) => {
+      const _onFulfilled = (res) => {
+        try {
+          resolve(onFulfilled(res));
+        } catch (err) {
+          reject(err);
+        }
+      };
+      const _onRejected = (err) => {
+        try {
+          reject(onRejected(err));
+        } catch (_err) {
+          reject(_err);
+        }
+      };
+      if (this.$state === 'FULFILLED') {
+        _onFulfilled(this.$internalValue);
+      } else if (this.$state === 'REJECTED') {
+        _onRejected(this.$internalalue);
+      } else {
+        this.$chained.push({ onFulfilled: _onFulfilled, onRejected: _onRejected });
+      }
+    });
+    // if (this.$state === 'FULFILLED') {
+    //   console.log('ON FULFILLED');
+    //   onFulfilled(this.$internalValue);
+    // } else if (this.$state === 'REJECTED') {
+    //   console.log('ON REJECTED');
+    //   onRejected(this.$internalValue);
+    // } else {
+    //   console.log('ON CHAINED');
+    //   this.$chained.push({ onFulfilled, onRejected });
+    // }
   }
 }
+
+// The idea of chaining is that if the `onFulfilled()` or `onRejected()` function
+// returns a promise, `then()` should return a new promise that is "locked in"
+// to match the state of the returned promise.
+
+// the rest of the tutorial gets pretty complex and reading it over once today
+// was pretty overwheling. I think what I need to do is that each step of the
+// way I should just test it and walk through the code until I understand it, and
+// then I can move on to coding up the next portion.
 
 const firstPromise = new MyPromise((resolve, reject) => {
   console.log('RUNNING THE EXECUTOR FUNCTION');
   // imagine if this were an api call, that took a second
   // to respond with 'wubadubdub'
-  setTimeout(resolve('wubadubdub'), 1000);
+  setTimeout(() => resolve('wubadubdub'), 1000);
 });
 
 firstPromise.then(successMessage => console.log(`wahoo ${successMessage}`));
