@@ -1,4 +1,4 @@
-// A promise is a state machine with 3 states: pending, fulfilled, rejected.
+/* // A promise is a state machine with 3 states: pending, fulfilled, rejected. */
 class MyPromise {
   constructor(executor) {
     if (typeof executor !== 'function') {
@@ -27,7 +27,7 @@ class MyPromise {
       this.$state = 'FULFILLED';
       this.$internalValue = res;
 
-      // If somebody called `.then()` while this functino was pending, need to
+      // If somebody called `.then()` while this function was pending, need to
       // call their `onFulfilled` function
       for (const { onFulfilled } of this.$chained) {
         onFulfilled(res);
@@ -111,23 +111,31 @@ class MyPromise {
 
 // firstPromise.then(successMessage => console.log(`wahoo ${successMessage}`));
 
-new MyPromise((resolve, reject) => {
-  setTimeout(() => resolve(1), 1000); // (*)
-})
-  .then((result) => {
-    console.log('HERE IS THE FIRST RESULT', result); // 1
-    return result * 2;
-  })
-  .then((result) => {
-    console.log('HERE IS THE SECOND RESULT', result); // 2
-    return result * 2;
-  })
-  .then((result) => {
-    console.log('HERE IS THE THIRD RESULT', result); // 4
-    return result * 2;
-  });
+// new MyPromise((resolve, reject) => {
+//   setTimeout(() => resolve(1), 1000); // (*)
+// })
+//   .then((result) => {
+//     console.log('HERE IS THE FIRST RESULT', result); // 1
+//     return result * 2;
+//   })
+//   .then((result) => {
+//     console.log('HERE IS THE SECOND RESULT', result); // 2
+//     return result * 2;
+//   })
+//   .then((result) => {
+//     console.log('HERE IS THE THIRD RESULT', result); // 4
+//     return result * 2;
+//   });
 
-// Old #then method that does not support promise chaining:
+const p = new MyPromise((resolve) => {
+  setTimeout(() => resolve('World'), 100);
+});
+
+p.then(res => new MyPromise(resolve => resolve(`Hello, ${res}`)))
+  // Will print out 'Hello, World' after approximately 100ms
+  .then(res => console.log(res));
+
+/* // Old #then method that does not support promise chaining:
 // then(onFulfilled, onRejected) {
 //   if (this.$state === 'FULFILLED') {
 //     console.log('ON FULFILLED');
@@ -139,7 +147,7 @@ new MyPromise((resolve, reject) => {
 //     console.log('ON CHAINED');
 //     this.$chained.push({ onFulfilled, onRejected });
 //   }
-// }
+// } */
 
 // old resolve method that does not support promise chaining:
 // const resolve = (res) => {
