@@ -7,6 +7,7 @@ build a promise library.
 - https://github.com/Jeach/jeach-pqueues
 - https://github.com/kriskowal/q/blob/v1/design/README.md
 - https://www.promisejs.org/implementing/
+- https://www.mauriciopoppe.com/notes/computer-science/computation/promises/
 
 ## Scenario
 
@@ -26,4 +27,4 @@ Here is an example of a real world 'sign up' API call:
     [this version](http://thecodebarbarian.com/write-your-own-node-js-promise-library-from-scratch.html).
     It went pretty well, and I have a much deeper understanding of promises now.
     However, when I got to the Promise chaining part, the code just got to be a
-    little too hard to follow for me, so I'm going to walk through [another tutorial](https://www.promisejs.org/implementing/).
+    little too hard to follow for me, so I'm going to walk through [another tutorial](https://www.mauriciopoppe.com/notes/computer-science/computation/promises/).
