@@ -1,0 +1,22 @@
+{
+  "name": "my_promise",
+  "version": "1.0.0",
+  "description": "Learn promises by building them",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshling1919/my_promise.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshling1919/my_promise/issues"
+  },
+  "homepage": "https://github.com/joshling1919/my_promise#readme",
+  "devDependencies": {
+    "jest": "^23.4.1"
+  }
+}
