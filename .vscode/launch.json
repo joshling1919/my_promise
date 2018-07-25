@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}/promise.js"
+      "program": "${workspaceFolder}/axios_lite/axios.js"
     }
   ]
 }
